@@ -1,39 +1,20 @@
 <!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
 <body>
 
 <div ng-app="myApp" ng-controller="myCtrl">
-
-<select ng-model="selectedName" ng-options="x for x in names">
-</select>
-
+	
+	<select ng-model="selectedName" ng-options="x for x in names" 
+    	ng-change="mudarDiretiva(templates[selectedName])"></select>    
+	
+	<div id="template"></div>
 </div>
 
 <script>
-var app = angular.module('myApp', []);
-  app.controller('myCtrl', function($scope) {
-      $scope.names = ["Emil", "Tobias", "Linus"];
-      
-      $scope.templates = {
-      		'0001' : '<primeira-drv></primeira-drv>',
-            '0002' : '<segunda-drv></segunda-drv>'
-      }
-      
-      $scope.addPrimeiraDrv = function() {  	  	  
-          var comp = $compile('<primeira-drv></primeira-drv>')($scope);              
-          angular.element(document.querySelector('#template')).empty();
-          angular.element(document.querySelector('#template')).append(comp);
-      };
+  var app = angular.module("myApp", ['ngSanitize']);
 
-      $scope.addSegundaDrv = function() {  	  	  
-          var comp = $compile('<segunda-drv></segunda-drv>')($scope);
-          angular.element(document.querySelector('#template')).empty();
-          angular.element(document.querySelector('#template')).append(comp);        	
-      };   
-  	  
-  });
-  
   app.directive("primeiraDrv", function() {
       return {
           template : "<h1>{{diretiva}} directiva!</h1>",
@@ -49,10 +30,21 @@ var app = angular.module('myApp', []);
   });
   
 
-  
+  app.controller("myCtrl", function($scope, $compile) {
+  	  $scope.names = ["0001", "0002"];
+      
+  	  $scope.templates = {
+      		'0001' : '<primeira-drv></primeira-drv>',
+            '0002' : '<segunda-drv></segunda-drv>'
+      }
+      
+      $scope.mudarDiretiva = function(diretiva) {  	  	            
+          var comp = $compile(diretiva)($scope);              
+          angular.element(document.querySelector('#template')).empty();
+          angular.element(document.querySelector('#template')).append(comp);
+      };
+
+  });
 </script>
-
-<p>This example shows how to fill a dropdown list using the ng-options directive.</p>
-
 </body>
 </html>

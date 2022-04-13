@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+
+<select ng-model="selectedName" ng-options="x for x in names">
+</select>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope) {
+      $scope.names = ["Emil", "Tobias", "Linus"];
+      
+      $scope.templates = {
+      		'0001' : '<primeira-drv></primeira-drv>',
+            '0002' : '<segunda-drv></segunda-drv>'
+      }
+      
+      $scope.addPrimeiraDrv = function() {  	  	  
+          var comp = $compile('<primeira-drv></primeira-drv>')($scope);              
+          angular.element(document.querySelector('#template')).empty();
+          angular.element(document.querySelector('#template')).append(comp);
+      };
+
+      $scope.addSegundaDrv = function() {  	  	  
+          var comp = $compile('<segunda-drv></segunda-drv>')($scope);
+          angular.element(document.querySelector('#template')).empty();
+          angular.element(document.querySelector('#template')).append(comp);        	
+      };   
+  	  
+  });
+  
+  app.directive("primeiraDrv", function() {
+      return {
+          template : "<h1>{{diretiva}} directiva!</h1>",
+          controller: function($scope) {$scope.diretiva = 'Primeira';}
+      };
+  });
+
+  app.directive("segundaDrv", function() {
+      return {
+          template : "<h1>{{diretiva}} directiva!</h1>",
+          controller: function($scope) {$scope.diretiva = 'Segunda';}
+      };
+  });
+  
+
+  
+</script>
+
+<p>This example shows how to fill a dropdown list using the ng-options directive.</p>
+
+</body>
+</html>
